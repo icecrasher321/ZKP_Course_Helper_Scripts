@@ -27,12 +27,12 @@ def parse_csv(input_file, output_file, correct_code):
             time_diff = submit_time - end_time
 
             if time_diff <= timedelta(minutes=20):
-                writer.writerow({'Berkeley Email': email, 'Sessions Attended': 1})
+                writer.writerow({'Berkeley Email': email, 'Sessions Attended': 1}) # Make it increment later
             else:
                 writer.writerow({'Berkeley Email': email, 'Sessions Attended': 0})
 
 input_file = 'zkp_attendance.csv'
 output_file = 'result.csv'
-correct_code = 'sigma'
+correct_code = 'sigma'  # Changes each week
 
 parse_csv(input_file, output_file, correct_code)
