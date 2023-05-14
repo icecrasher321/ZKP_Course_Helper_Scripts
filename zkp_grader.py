@@ -6,7 +6,7 @@ enrollment = {}
 for filename in enrollment_csvs:
     enrollment_df = pd.read_csv(filename)
     for index, row in enrollment_df.iterrows():
-        enrollment[str(row['Student ID'])] = {'Email': row['Email Address'], 'Units': row['Units']}  # convert to string and include Units column
+        enrollment[str(row['Student ID'])] = {'Email': row['Email Address'], 'Units': row['Units'], 'Name': row['Name']}
 
 
 # Step 2: Load BCourses CSV file into dataframe
@@ -38,13 +38,17 @@ attendance_df = pd.read_csv(attendance_csv)
 attendance_df = attendance_df.rename(columns={'Student': 'Email', 'Sessions': 'Attendance Count'})  # rename columns to match
 bcourses_df = bcourses_df.merge(attendance_df[['Email', 'Attendance Count']], on='Email', how='left')
 
-# Step 8: Select the desired columns for output
-selected_columns = ['Student ID', 'Email', 'Units', 'Lab (8578848)', 'Milestone Report (8582031)', 'HW (8586753)', 'Quizzes Final Score (8583536)', 'Makeup Count', 'Attendance Count']
+# Step 8: Merge with article scores, Project Proposal, Presentation, Final Report sheet
+articles_csv = 'other_scores.csv'
+articles_df = pd.read_csv(articles_csv)
+bcourses_df = bcourses_df.merge(articles_df[['Email', 'Article', 'Project Proposal', 'Project Presentation', 'Final report', 'Implementation Score']], on='Email', how='left')
+
+# Step 9: Select the desired columns for output
+selected_columns = ['Student ID', 'Email', 'Name', 'Units', 'Lab (8578848)', 'Milestone Report (8582031)', 'HW (8586753)', 'Quizzes Final Score (8583536)', 'Makeup Count', 'Attendance Count', 'Article', 'Project Proposal', 'Project Presentation', 'Final report', 'Implementation Score']
 bcourses_df = bcourses_df[selected_columns]
 
-# Step 9: Write updated BCourses dataframe to CSV file
-bcourses_df.to_csv('final_sheet_final.csv', index=False)
-
+# Step 10: Write updated BCourses dataframe to CSV file
+bcourses_df.to_csv('Berkeley_Scores_Sheet_Updated.csv', index=False)
 
 
 
